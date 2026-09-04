@@ -1,0 +1,50 @@
+---
+import AboutHeroImage from '../assets/images/teluis_avatar.jpg';
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+	title="運営者について"
+	description="コンサルティングファームで働くITエンジニアのプロフィール"
+	pubDate={new Date('2026-09-01')}
+	heroImage={AboutHeroImage}
+>
+	<h3>プロフィール</h3>
+	<p>
+		はじめまして。当ブログ「telubiz」の運営者です。<br>
+		現在はコンサルティングファームに勤務するITエンジニアとして、日々様々な企業の課題解決やシステム導入支援に携わっています。
+	</p>
+
+	<h3>これまでのキャリア</h3>
+	<ul>
+		<li><strong>日経大手企業:</strong> キャリアのスタート。大規模なシステム開発と、組織の中で働く基礎となるビジネススキルを徹底的に学びました。</li>
+		<li><strong>AIスタートアップ:</strong> 最先端の技術に触れながら、スピード感を持ってプロダクトをゼロから作り上げる経験を積みました。</li>
+		<li><strong>コンサルティングファーム (現在):</strong> これまでの技術的な知見とビジネス視点を掛け合わせ、クライアントのIT戦略立案や業務改善を支援しています。</li>
+	</ul>
+
+	<hr />
+
+	<h3>共同運営者：TELUIS 妻</h3>
+	<div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
+		<img src="/brand/テルイズ妻.png" alt="妻のプロフィール画像" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
+		<p style="margin: 0;">
+			当ブログの共同運営者であり、デザインや一部の記事執筆、編集サポートを担当しています。夫婦ならではの多様な視点で、より幅広い層に役立つ情報をお届けします。
+		</p>
+	</div>
+
+	<hr />
+
+	<h3>このブログで発信すること</h3>
+	<p>
+		これまでの多角的なキャリアの中で、<strong>「技術力だけでなく、ビジネスを前進させるためのスキル」</strong>の重要性を痛感してきました。<br>
+		当ブログでは、若手から中堅のビジネスパーソンやエンジニアに向けて、以下のようなテーマを中心に発信していきます。
+	</p>
+	<ul>
+		<li>日々の業務で感じた本質的なエッセンス</li>
+		<li>ITエンジニアが身につけるべきビジネススキル</li>
+		<li>生産性向上や仕事術</li>
+	</ul>
+	<p>
+		実体験に基づくリアルな情報をお届けしますので、ぜひ日々の仕事のヒントにしていただければ幸いです。
+	</p>
+</Layout>

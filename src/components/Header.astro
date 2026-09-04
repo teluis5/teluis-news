@@ -1,0 +1,151 @@
+---
+import { SITE_TITLE } from '../consts';
+import HeaderLink from './HeaderLink.astro';
+---
+
+<header class="site-header">
+	<div class="header-inner">
+		<h2>
+			<a href="/" style="display: flex; align-items: center;">
+				<div style="height: 40px; display: flex; align-items: center; overflow: hidden;">
+					<img src="/brand/teluis_horizontal_logo.jpg" alt="TELUIS" style="height: 70px; width: auto; mix-blend-mode: multiply;" />
+				</div>
+				<span class="sr-only">{SITE_TITLE}</span>
+			</a>
+		</h2>
+		
+		<button id="menu-btn" class="hamburger-btn" aria-label="Menu">
+			<span class="hamburger-line"></span>
+			<span class="hamburger-line"></span>
+			<span class="hamburger-line"></span>
+		</button>
+
+		<nav id="nav-menu">
+			<div class="internal-links">
+				<HeaderLink href="/">Home</HeaderLink>
+				<HeaderLink href="/category">Category</HeaderLink>
+				<HeaderLink href="/about">About</HeaderLink>
+				<HeaderLink href="/contact">Contact</HeaderLink>
+			</div>
+		</nav>
+	</div>
+</header>
+
+<script>
+	// Hamburger menu toggle logic
+	const menuBtn = document.getElementById('menu-btn');
+	const navMenu = document.getElementById('nav-menu');
+	
+	if (menuBtn && navMenu) {
+		menuBtn.addEventListener('click', () => {
+			navMenu.classList.toggle('active');
+			menuBtn.classList.toggle('open');
+		});
+	}
+</script>
+
+<style>
+	.site-header {
+		background-color: var(--bg-content);
+		border-bottom: 1px solid var(--border-color);
+		margin: 0;
+		position: sticky;
+		top: 0;
+		z-index: 1000;
+		/* box-shadow for sticky separation (optional) */
+		box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+	}
+	.header-inner {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0.5em 1em;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+	}
+	h2 {
+		margin: 0;
+		font-size: 1.4em;
+	}
+	h2 a {
+		color: var(--text-main);
+		text-decoration: none;
+	}
+	nav {
+		display: flex;
+		align-items: center;
+	}
+	.internal-links {
+		display: flex;
+		align-items: center;
+		gap: 1em;
+	}
+	nav a {
+		padding: 0.5em 0.5em;
+		color: var(--text-main);
+		text-decoration: none;
+		font-weight: bold;
+		font-size: 0.95em;
+	}
+	nav a:hover {
+		opacity: 0.7;
+	}
+	
+	/* Hamburger Button Hidden on PC */
+	.hamburger-btn {
+		display: none;
+		flex-direction: column;
+		justify-content: space-between;
+		width: 24px;
+		height: 18px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+		z-index: 1001; /* Above menu */
+	}
+	.hamburger-line {
+		display: block;
+		height: 2px;
+		width: 100%;
+		background-color: var(--text-main);
+		transition: all 0.3s ease;
+	}
+
+	@media (max-width: 720px) {
+		.hamburger-btn {
+			display: flex;
+		}
+		
+		nav {
+			display: none;
+			width: 100%;
+			margin-top: 1rem;
+		}
+		nav.active {
+			display: block;
+		}
+		.internal-links {
+			flex-direction: column;
+			gap: 0;
+			text-align: center;
+		}
+		.internal-links a {
+			padding: 1rem;
+			width: 100%;
+			border-top: 1px solid var(--border-color);
+		}
+		
+		/* Hamburger animation */
+		.hamburger-btn.open .hamburger-line:nth-child(1) {
+			transform: translateY(8px) rotate(45deg);
+		}
+		.hamburger-btn.open .hamburger-line:nth-child(2) {
+			opacity: 0;
+		}
+		.hamburger-btn.open .hamburger-line:nth-child(3) {
+			transform: translateY(-8px) rotate(-45deg);
+		}
+	}
+</style>
