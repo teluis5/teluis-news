@@ -4,8 +4,7 @@ import icon from 'astro-icon';
 import { defineConfig, fontProviders } from 'astro/config';
 
 export default defineConfig({
-	site: 'https://teluis5.github.io',
-	base: '/teluis-news',
+	site: 'https://news.teluis.com',
 	integrations: [mdx(), sitemap(), icon()],
 	fonts: [
 		{
@@ -13,12 +12,7 @@ export default defineConfig({
 			name: 'Atkinson',
 			cssVariable: '--font-atkinson',
 			fallbacks: ['sans-serif'],
-			options: {
-				variants: [
-					{ src: ['./src/assets/fonts/atkinson-regular.woff'], weight: 400, style: 'normal', display: 'swap' },
-					{ src: ['./src/assets/fonts/atkinson-bold.woff'], weight: 700, style: 'normal', display: 'swap' }
-				]
-			}
+			options: [ { src: ['./src/assets/fonts/atkinson-regular.woff'], weight: 400, style: 'normal', display: 'swap' }, { src: ['./src/assets/fonts/atkinson-bold.woff'], weight: 700, style: 'normal', display: 'swap' } ]
 		}
 	]
 });
