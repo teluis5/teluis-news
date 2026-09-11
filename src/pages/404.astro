@@ -16,7 +16,7 @@ const recentPosts = allPosts
 <!doctype html>
 <html lang="ja">
 	<head>
-		<BaseHead title={404 Not Found | } description="お探しのページは見つかりませんでした。" />
+		<BaseHead title={'404 Not Found | ' + SITE_TITLE} description="お探しのページは見つかりませんでした。" />
 		<style>
 			.error-container {
 				max-width: 800px;
@@ -131,7 +131,7 @@ const recentPosts = allPosts
 						<ul class="recent-list">
 							{recentPosts.map((post) => (
 								<li class="recent-item">
-									<a href={/blog//}>
+									<a href={'/blog/' + post.id + '/'}>
 										<Icon name="heroicons:chevron-right" class="icon-inline" style="font-size: 0.85em; color: var(--theme-accent); flex-shrink: 0;" />
 										<span>{post.data.title}</span>
 									</a>
