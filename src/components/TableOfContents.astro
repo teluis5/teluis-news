@@ -1,4 +1,4 @@
----
+﻿---
 import { Icon } from 'astro-icon/components';
 
 export interface Props {
@@ -57,7 +57,7 @@ const tocHeadings = headings ? headings.filter((h) => h.depth === 2 || h.depth =
 		margin-top: 0.8rem !important;
 	}
 	.toc-depth-2::before {
-		content: "■";
+		content: "\25A0"; /* Square */
 		color: var(--theme-accent);
 		margin-right: 0.5rem;
 		font-size: 0.8em;
@@ -67,7 +67,7 @@ const tocHeadings = headings ? headings.filter((h) => h.depth === 2 || h.depth =
 		font-size: 0.95rem;
 	}
 	.toc-depth-3::before {
-		content: "└";
+		content: "\2514"; /* L shape */
 		color: var(--text-light);
 		margin-right: 0.5rem;
 	}
