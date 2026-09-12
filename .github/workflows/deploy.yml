@@ -1,4 +1,4 @@
-﻿name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 24
           package-manager: npm
-deploy:
+  deploy:
     needs: build
     runs-on: ubuntu-latest
     environment:
