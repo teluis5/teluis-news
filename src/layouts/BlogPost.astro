@@ -160,13 +160,30 @@ const { title, description, pubDate, updatedDate, heroImage, categories, heading
 					</div>
 					
 					<div class="prose">
-						{headings && <TableOfContents headings={headings} />}<slot />
+						<div id="toc-wrapper">
+							{headings && <TableOfContents headings={headings} />}
+						</div>
+						<slot />
 						
 						<!-- 記事下広告 -->
 						<div style="margin-top: 3rem;">
 							<Ad />
 						</div>
 					</div>
+
+					<script is:inline>
+						(() => {
+							const toc = document.getElementById('toc-wrapper');
+							if (!toc) return;
+							if (!toc.querySelector('.toc-container')) return;
+							
+							// 記事本文(.prose)内の最初の見出し(h2, h3, h4)を取得
+							const firstHeading = document.querySelector('.prose h2, .prose h3, .prose h4');
+							if (firstHeading && firstHeading.parentNode && toc.nextElementSibling !== firstHeading) {
+								firstHeading.parentNode.insertBefore(toc, firstHeading);
+							}
+						})();
+					</script>
 				</article>
 
 				<!-- サイドバー (右カラム) -->
@@ -200,6 +217,15 @@ const { title, description, pubDate, updatedDate, heroImage, categories, heading
 
 		<script>
 			document.addEventListener('DOMContentLoaded', () => {
+				// 目次を最初の見出しの直前に移動
+				const toc = document.getElementById('toc-wrapper');
+				if (toc && toc.querySelector('.toc-container')) {
+					const firstHeading = document.querySelector('.prose h2, .prose h3, .prose h4');
+					if (firstHeading && firstHeading.parentNode && toc.nextElementSibling !== firstHeading) {
+						firstHeading.parentNode.insertBefore(toc, firstHeading);
+					}
+				}
+
 				const tables = document.querySelectorAll('.prose table');
 				tables.forEach(table => {
 					// 最初の行の列数をカウント（DOMの table.rows を使用して正確に取得）
