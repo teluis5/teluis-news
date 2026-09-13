@@ -73,6 +73,51 @@ img {
 	height: auto;
 }
 
+/* Image Caption (figure / figcaption) */
+figure {
+	margin: 2rem 0;
+	text-align: center;
+}
+
+figure img {
+	display: block;
+	margin: 0 auto;
+	border-radius: var(--radius);
+}
+
+figcaption,
+.caption,
+.image-caption {
+	display: block;
+	font-size: 0.85rem;
+	color: var(--text-light);
+	margin-top: 0.5rem;
+	text-align: center;
+	line-height: 1.5;
+}
+
+figcaption p,
+.caption p,
+.image-caption p {
+	margin: 0;
+	font-size: inherit;
+	color: inherit;
+	line-height: inherit;
+}
+
+figcaption a,
+.caption a,
+.image-caption a {
+	color: var(--text-light);
+	text-decoration: underline;
+}
+
+figcaption a:hover,
+.caption a:hover,
+.image-caption a:hover {
+	color: var(--theme-accent);
+}
+
 code {
 	padding: 2px 5px;
 	background-color: var(--bg-main);
