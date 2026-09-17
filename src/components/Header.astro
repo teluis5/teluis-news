@@ -1,12 +1,13 @@
 ﻿---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+import SearchModal from './SearchModal.astro';
+import { Icon } from 'astro-icon/components';
 ---
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZ2SJ4PM"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-
 
 <header class="site-header">
 	<div class="header-inner">
@@ -19,42 +20,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			</a>
 		</h2>
 		
-		<button id="menu-btn" class="hamburger-btn" aria-label="Menu">
-			<span class="hamburger-line"></span>
-			<span class="hamburger-line"></span>
-			<span class="hamburger-line"></span>
-		</button>
+		<div class="header-right">
+			<nav id="nav-menu">
+				<div class="internal-links">
+					<HeaderLink href="/">Home</HeaderLink>
+					<HeaderLink href="/category">Category</HeaderLink>
+					<HeaderLink href="/about">About</HeaderLink>
+					<HeaderLink href="/contact">Contact</HeaderLink>
+				</div>
+			</nav>
 
-		<nav id="nav-menu">
-			<div class="internal-links">
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZ2SJ4PM"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+			<button type="button" class="search-trigger-btn header-search-btn" aria-label="サイト内検索" title="検索 (Cmd+K / Ctrl+K)">
+				<Icon name="heroicons:magnifying-glass" class="search-btn-icon" />
+				<span class="search-btn-label">検索</span>
+				<span class="search-btn-kbd"><kbd>⌘K</kbd></span>
+			</button>
 
-				<HeaderLink href="/">Home</HeaderLink>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZ2SJ4PM"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-				<HeaderLink href="/category">Category</HeaderLink>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZ2SJ4PM"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-				<HeaderLink href="/about">About</HeaderLink>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZ2SJ4PM"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-				<HeaderLink href="/contact">Contact</HeaderLink>
-			</div>
-		</nav>
+			<button id="menu-btn" class="hamburger-btn" aria-label="Menu">
+				<span class="hamburger-line"></span>
+				<span class="hamburger-line"></span>
+				<span class="hamburger-line"></span>
+			</button>
+		</div>
 	</div>
 </header>
+<SearchModal />
 
 <script>
 	// Hamburger menu toggle logic
@@ -77,7 +67,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		position: sticky;
 		top: 0;
 		z-index: 1000;
-		/* box-shadow for sticky separation (optional) */
 		box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 	}
 	.header-inner {
@@ -87,7 +76,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		flex-wrap: wrap;
+		position: relative;
 	}
 	h2 {
 		margin: 0;
@@ -97,6 +86,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		color: var(--text-main);
 		text-decoration: none;
 	}
+
+	.header-right {
+		display: flex;
+		align-items: center;
+		gap: 0.8rem;
+	}
+
 	nav {
 		display: flex;
 		align-items: center;
@@ -116,6 +112,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 	nav a:hover {
 		opacity: 0.7;
 	}
+
+	/* Search Button */
+	.header-search-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.35rem 0.65rem;
+		background-color: var(--bg-main);
+		border: 1px solid var(--border-color);
+		border-radius: 20px;
+		color: var(--text-light);
+		font-size: 0.85rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		font-family: inherit;
+		line-height: 1;
+	}
+	.header-search-btn:hover {
+		border-color: var(--theme-accent);
+		color: var(--theme-accent);
+		background-color: var(--bg-content);
+	}
+	.search-btn-icon {
+		font-size: 1.1rem;
+		flex-shrink: 0;
+	}
+	.search-btn-kbd {
+		display: inline-flex;
+		align-items: center;
+	}
+	.search-btn-kbd kbd {
+		background-color: var(--bg-content);
+		border: 1px solid var(--border-color);
+		padding: 0.05rem 0.3rem;
+		border-radius: 3px;
+		font-size: 0.7rem;
+		box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+	}
 	
 	/* Hamburger Button Hidden on PC */
 	.hamburger-btn {
@@ -128,7 +162,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		border: none;
 		cursor: pointer;
 		padding: 0;
-		z-index: 1001; /* Above menu */
+		z-index: 1001;
 	}
 	.hamburger-line {
 		display: block;
@@ -142,11 +176,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		.hamburger-btn {
 			display: flex;
 		}
+
+		.header-search-btn {
+			padding: 0.4rem;
+			border-radius: 50%;
+			background: none;
+			border: none;
+			color: var(--text-main);
+		}
+		.header-search-btn:hover {
+			background-color: var(--bg-main);
+		}
+		.search-btn-icon {
+			font-size: 1.3rem;
+		}
+		.search-btn-label,
+		.search-btn-kbd {
+			display: none;
+		}
 		
 		nav {
 			display: none;
+			position: absolute;
+			top: 100%;
+			left: 0;
 			width: 100%;
-			margin-top: 1rem;
+			background-color: var(--bg-content);
+			border-bottom: 1px solid var(--border-color);
+			box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 		}
 		nav.active {
 			display: block;
