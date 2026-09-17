@@ -173,6 +173,98 @@ tbody td:first-child {
 	font-size: 0.85rem;
 	background-color: #fafafa;
 }
+/* 楽天アフィリエイトウィジェット表示の最適化 */
+table:has(a[href*="rakuten.co.jp"]) {
+	border: none !important;
+	background: transparent !important;
+	margin: 2rem auto !important;
+	max-width: 504px !important;
+	width: 100% !important;
+	box-shadow: none !important;
+	display: table !important;
+}
+table:has(a[href*="rakuten.co.jp"]) table {
+	border: none !important;
+	background: transparent !important;
+	margin: 0 auto !important;
+	width: 100% !important;
+	box-shadow: none !important;
+}
+table:has(a[href*="rakuten.co.jp"]) th,
+table:has(a[href*="rakuten.co.jp"]) td {
+	border: none !important;
+	background: transparent !important;
+	padding: 0 !important;
+	box-shadow: none !important;
+	font-weight: normal !important;
+}
+table:has(a[href*="rakuten.co.jp"]) img {
+	background-color: transparent !important;
+}
+table:has(a[href*="rakuten.co.jp"]) a {
+	word-break: normal !important;
+}
+table:has(a[href*="rakuten.co.jp"]) a div[style*="background-color:#bf0000"],
+table:has(a[href*="rakuten.co.jp"]) a[href*="bbtn"] div {
+	white-space: nowrap !important;
+	word-break: keep-all !important;
+	width: auto !important;
+	min-width: 84px !important;
+	box-sizing: border-box !important;
+}
+table:has(a[href*="rakuten.co.jp"]) br {
+	display: none;
+}
+table:has(a[href*="rakuten.co.jp"]) div[style*="border-radius"] {
+	margin-left: auto !important;
+	margin-right: auto !important;
+	max-width: 100% !important;
+	box-sizing: border-box !important;
+}
+@media (max-width: 560px) {
+	table:has(a[href*="rakuten.co.jp"]) table,
+	table:has(a[href*="rakuten.co.jp"]) table tbody,
+	table:has(a[href*="rakuten.co.jp"]) table tr {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		width: 100% !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td {
+		width: 100% !important;
+		max-width: 100% !important;
+		display: block !important;
+		text-align: center !important;
+		box-sizing: border-box !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:first-child a {
+		display: inline-block !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:first-child img {
+		max-width: 100% !important;
+		height: auto !important;
+		margin: 0 auto !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:last-child p {
+		text-align: center !important;
+		margin: 8px 0 !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:last-child div {
+		display: flex !important;
+		justify-content: center !important;
+		align-items: center !important;
+		gap: 12px !important;
+		margin: 8px auto !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:last-child div a {
+		float: none !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:last-child div a:last-child div {
+		float: none !important;
+		width: auto !important;
+		min-width: 110px !important;
+	}
+}
 thead th {
 	position: sticky;
 	top: 57px; /* サイトのヘッダー高さ(約57px)に合わせる */
