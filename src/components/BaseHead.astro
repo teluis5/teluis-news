@@ -22,12 +22,43 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-<!-- Google Tag Manager -->
-<script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-NZ2SJ4PM');</script>
+<!-- Google Tag Manager (管理者除外対応) -->
+<script is:inline>
+(function(w,d,s,l,i){
+  try {
+    var params = new URLSearchParams(w.location.search);
+    var hostname = w.location.hostname;
+    var domainAttr = hostname.endsWith('teluis.com') ? '; domain=.teluis.com' : '';
+    if (params.get('admin') === 'true') {
+      d.cookie = "teluis_admin=true; path=/" + domainAttr + "; max-age=31536000; SameSite=Lax";
+      localStorage.setItem('teluis_admin', 'true');
+      console.log('[Admin Mode] GA/GTM 計測除外モードを有効化しました');
+    } else if (params.get('admin') === 'false') {
+      d.cookie = "teluis_admin=; path=/" + domainAttr + "; max-age=0";
+      localStorage.removeItem('teluis_admin');
+      console.log('[Admin Mode] GA/GTM 計測除外モードを解除しました');
+    }
+  } catch (e) {}
+
+  var isAdmin = (d.cookie.indexOf('teluis_admin=true') !== -1);
+  try {
+    if (!isAdmin && localStorage.getItem('teluis_admin') === 'true') {
+      isAdmin = true;
+    }
+  } catch (e) {}
+
+  if (isAdmin) {
+    w[l] = w[l] || [];
+    console.info('[Admin Mode] GTMの読み込みをスキップしました (自アクセス除外中)');
+    return;
+  }
+
+  w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NZ2SJ4PM');
+</script>
 <!-- End Google Tag Manager -->
 <link rel="icon" href="/brand/teluis_new_icon.jpg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
