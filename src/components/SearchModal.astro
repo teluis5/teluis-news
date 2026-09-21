@@ -1,4 +1,4 @@
-﻿---
+---
 import { Icon } from 'astro-icon/components';
 ---
 
@@ -169,8 +169,8 @@ import { Icon } from 'astro-icon/components';
 		statusEl.style.display = 'none';
 		selectedIndex = -1;
 
-		// 結果の描画（最大25件）
-		const displayItems = matchedItems.slice(0, 25);
+		// 結果の描画（最大20件）
+		const displayItems = matchedItems.slice(0, 20);
 		resultsList.innerHTML = displayItems
 			.map(({ item }, index) => {
 				const highlightedTitle = highlightMatch(item.title, keywords);
@@ -181,7 +181,7 @@ import { Icon } from 'astro-icon/components';
 				// サムネイル画像のHTML（画像あり / なしフォールバック）
 				const thumbHtml = item.heroImage
 					? `<div class="search-result-thumb"><img src="${item.heroImage}" alt="" loading="lazy" /></div>`
-					: `<div class="search-result-thumb search-result-thumb-placeholder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20" style="width:20px;height:20px;"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg></div>`;
+					: `<div class="search-result-thumb search-result-thumb-placeholder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg></div>`;
 
 				return `
 				<li class="search-result-item" data-index="${index}">
@@ -194,10 +194,8 @@ import { Icon } from 'astro-icon/components';
 								${item.pubDate ? `<time class="search-result-date">${item.pubDate}</time>` : ''}
 							</div>
 						</div>
-						<div class="search-result-arrow" aria-hidden="true">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="width:16px;height:16px;flex-shrink:0;">
-								<path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
-							</svg>
+						<div class="search-result-arrow" aria-hidden="true" style="width: 16px; height: 16px; min-width: 16px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="width: 16px !important; height: 16px !important; min-width: 16px; max-width: 16px; display: block;"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" /></svg>
 						</div>
 					</a>
 				</li>
@@ -535,8 +533,12 @@ import { Icon } from 'astro-icon/components';
 		color: #94a3b8;
 		flex-shrink: 0;
 		align-self: center;
-		width: 16px;
-		height: 16px;
+		width: 16px !important;
+		min-width: 16px !important;
+		max-width: 16px !important;
+		height: 16px !important;
+		min-height: 16px !important;
+		max-height: 16px !important;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -547,9 +549,12 @@ import { Icon } from 'astro-icon/components';
 	.search-results-list :global(.search-result-arrow svg) {
 		width: 16px !important;
 		height: 16px !important;
+		min-width: 16px !important;
 		max-width: 16px !important;
+		min-height: 16px !important;
 		max-height: 16px !important;
 		display: block;
+		flex-shrink: 0;
 	}
 
 	.search-results-list :global(.search-result-item.selected .search-result-arrow),
@@ -628,7 +633,7 @@ import { Icon } from 'astro-icon/components';
 			font-size: 0.88rem;
 		}
 		.search-results-list :global(.search-result-arrow) {
-			display: none;
+			display: none !important;
 		}
 		.search-shortcuts span:not(:last-child) {
 			display: none;
