@@ -169,8 +169,8 @@ import { Icon } from 'astro-icon/components';
 		statusEl.style.display = 'none';
 		selectedIndex = -1;
 
-		// 結果の描画（最大20件）
-		const displayItems = matchedItems.slice(0, 20);
+		// 結果の描画（最大25件）
+		const displayItems = matchedItems.slice(0, 25);
 		resultsList.innerHTML = displayItems
 			.map(({ item }, index) => {
 				const highlightedTitle = highlightMatch(item.title, keywords);
@@ -181,7 +181,7 @@ import { Icon } from 'astro-icon/components';
 				// サムネイル画像のHTML（画像あり / なしフォールバック）
 				const thumbHtml = item.heroImage
 					? `<div class="search-result-thumb"><img src="${item.heroImage}" alt="" loading="lazy" /></div>`
-					: `<div class="search-result-thumb search-result-thumb-placeholder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg></div>`;
+					: `<div class="search-result-thumb search-result-thumb-placeholder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20" style="width:20px;height:20px;"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg></div>`;
 
 				return `
 				<li class="search-result-item" data-index="${index}">
@@ -195,7 +195,9 @@ import { Icon } from 'astro-icon/components';
 							</div>
 						</div>
 						<div class="search-result-arrow" aria-hidden="true">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" /></svg>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="width:16px;height:16px;flex-shrink:0;">
+								<path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+							</svg>
 						</div>
 					</a>
 				</li>
@@ -303,7 +305,7 @@ import { Icon } from 'astro-icon/components';
 		overflow-y: auto;
 		align-items: flex-start;
 		justify-content: center;
-		padding: 3rem 1rem;
+		padding: 2.5rem 1rem;
 	}
 
 	.search-modal.open {
@@ -335,20 +337,20 @@ import { Icon } from 'astro-icon/components';
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
-		max-height: 80vh;
+		max-height: 85vh;
 	}
 
 	.search-header {
 		display: flex;
 		align-items: center;
-		padding: 0.85rem 1.2rem;
+		padding: 0.75rem 1.2rem;
 		border-bottom: 1px solid var(--border-color);
 		gap: 0.75rem;
 		background-color: var(--bg-content);
 	}
 
 	.search-input-icon {
-		font-size: 1.3rem;
+		font-size: 1.25rem;
 		color: var(--text-light);
 		flex-shrink: 0;
 	}
@@ -358,7 +360,7 @@ import { Icon } from 'astro-icon/components';
 		border: none;
 		outline: none;
 		background: transparent;
-		font-size: 1.1rem;
+		font-size: 1.05rem;
 		color: var(--text-main);
 		font-family: inherit;
 		min-width: 0;
@@ -389,8 +391,9 @@ import { Icon } from 'astro-icon/components';
 
 	.search-results-area {
 		overflow-y: auto;
-		padding: 0.35rem 0;
+		padding: 0.2rem 0;
 		flex: 1;
+		min-height: 180px;
 	}
 
 	.search-status {
@@ -406,38 +409,39 @@ import { Icon } from 'astro-icon/components';
 		margin: 0 !important;
 	}
 
-	.search-result-item {
+	/* 動的生成される要素に確実に効かせるための :global セレクタ */
+	.search-results-list :global(.search-result-item) {
 		border-bottom: 1px solid var(--border-color);
 		border-left: 3px solid transparent;
 		transition: all 0.15s ease;
 	}
 
-	.search-result-item:last-child {
+	.search-results-list :global(.search-result-item:last-child) {
 		border-bottom: none;
 	}
 
-	.search-result-item.selected,
-	.search-result-item:hover {
+	.search-results-list :global(.search-result-item.selected),
+	.search-results-list :global(.search-result-item:hover) {
 		background-color: #f0f7fa;
 		border-left-color: var(--theme-accent);
 	}
 
-	/* Card Layout: Left Thumbnail, Right Page Title */
-	.search-result-link {
+	/* コンパクトなカードレイアウト（高さ抑制で一度に多くの結果を表示） */
+	.search-results-list :global(.search-result-link) {
 		display: flex;
 		align-items: center;
-		gap: 1.1rem;
-		padding: 0.85rem 1.2rem;
+		gap: 0.85rem;
+		padding: 0.55rem 1rem;
 		text-decoration: none !important;
 		color: inherit;
 	}
 
-	/* Left: Thumbnail */
-	.search-result-thumb {
-		width: 112px;
-		height: 72px;
+	/* 左: コンパクトサムネイル */
+	.search-results-list :global(.search-result-thumb) {
+		width: 80px;
+		height: 52px;
 		flex-shrink: 0;
-		border-radius: 6px;
+		border-radius: 4px;
 		overflow: hidden;
 		background-color: var(--bg-main);
 		border: 1px solid var(--border-color);
@@ -446,7 +450,7 @@ import { Icon } from 'astro-icon/components';
 		justify-content: center;
 	}
 
-	.search-result-thumb img {
+	.search-results-list :global(.search-result-thumb img) {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
@@ -454,34 +458,34 @@ import { Icon } from 'astro-icon/components';
 		transition: transform 0.2s ease;
 	}
 
-	.search-result-item.selected .search-result-thumb img,
-	.search-result-item:hover .search-result-thumb img {
+	.search-results-list :global(.search-result-item.selected .search-result-thumb img),
+	.search-results-list :global(.search-result-item:hover .search-result-thumb img) {
 		transform: scale(1.05);
 	}
 
-	.search-result-thumb-placeholder {
+	.search-results-list :global(.search-result-thumb-placeholder) {
 		color: #cbd5e1;
 	}
 
-	.search-result-thumb-placeholder svg {
-		width: 32px;
-		height: 32px;
+	.search-results-list :global(.search-result-thumb-placeholder svg) {
+		width: 22px !important;
+		height: 22px !important;
 	}
 
-	/* Right: Page Title and Meta */
-	.search-result-body {
+	/* 右: ページタイトル & メタ情報 */
+	.search-results-list :global(.search-result-body) {
 		flex: 1;
 		min-width: 0;
 	}
 
-	/* Decorated Page Title */
-	.search-result-title {
-		font-size: 1.05rem;
+	/* 装飾付きページタイトル */
+	.search-results-list :global(.search-result-title) {
+		font-size: 0.95rem;
 		font-weight: 700;
 		color: var(--text-main);
-		line-height: 1.45;
-		margin: 0 0 0.35rem 0;
-		letter-spacing: 0.015em;
+		line-height: 1.4;
+		margin: 0 0 0.2rem 0;
+		letter-spacing: 0.01em;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
@@ -489,8 +493,8 @@ import { Icon } from 'astro-icon/components';
 		transition: color 0.15s ease;
 	}
 
-	.search-result-item.selected .search-result-title,
-	.search-result-item:hover .search-result-title {
+	.search-results-list :global(.search-result-item.selected .search-result-title),
+	.search-results-list :global(.search-result-item:hover .search-result-title) {
 		color: var(--theme-accent);
 		text-decoration: underline;
 		text-decoration-color: var(--theme-accent);
@@ -498,60 +502,64 @@ import { Icon } from 'astro-icon/components';
 		text-decoration-thickness: 1.5px;
 	}
 
-	.search-result-meta {
+	.search-results-list :global(.search-result-meta) {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
-		font-size: 0.78rem;
+		gap: 0.5rem;
+		font-size: 0.75rem;
+		line-height: 1;
 	}
 
-	.search-result-cats {
+	.search-results-list :global(.search-result-cats) {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.3rem;
+		gap: 0.25rem;
 	}
 
-	.search-result-cat {
+	.search-results-list :global(.search-result-cat) {
 		background-color: #e0f2fe;
 		color: #0369a1;
-		padding: 0.1rem 0.45rem;
+		padding: 0.1rem 0.4rem;
 		border-radius: 9999px;
 		font-weight: 600;
-		font-size: 0.72rem;
+		font-size: 0.7rem;
 		line-height: 1.2;
 	}
 
-	.search-result-date {
+	.search-results-list :global(.search-result-date) {
 		color: var(--text-light);
 	}
 
-	/* Right Arrow Icon */
-	.search-result-arrow {
-		color: #cbd5e1;
+	/* 右端: 矢印アイコン（サイズ固定16px・巨大化防止） */
+	.search-results-list :global(.search-result-arrow) {
+		color: #94a3b8;
 		flex-shrink: 0;
 		align-self: center;
-		width: 1.25rem;
-		height: 1.25rem;
+		width: 16px;
+		height: 16px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		transition: all 0.2s ease;
-		opacity: 0.6;
+		opacity: 0.45;
 	}
 
-	.search-result-arrow svg {
-		width: 100%;
-		height: 100%;
+	.search-results-list :global(.search-result-arrow svg) {
+		width: 16px !important;
+		height: 16px !important;
+		max-width: 16px !important;
+		max-height: 16px !important;
+		display: block;
 	}
 
-	.search-result-item.selected .search-result-arrow,
-	.search-result-item:hover .search-result-arrow {
+	.search-results-list :global(.search-result-item.selected .search-result-arrow),
+	.search-results-list :global(.search-result-item:hover .search-result-arrow) {
 		color: var(--theme-accent);
 		transform: translateX(3px);
 		opacity: 1;
 	}
 
-	/* Keyword Highlight */
+	/* キーワードハイライト */
 	:global(.search-highlight) {
 		background: linear-gradient(transparent 55%, #fff3cd 55%);
 		color: inherit;
@@ -561,7 +569,7 @@ import { Icon } from 'astro-icon/components';
 	}
 
 	.search-footer {
-		padding: 0.6rem 1.2rem;
+		padding: 0.55rem 1.2rem;
 		background-color: var(--bg-main);
 		border-top: 1px solid var(--border-color);
 		display: flex;
@@ -605,18 +613,21 @@ import { Icon } from 'astro-icon/components';
 		.search-modal {
 			padding: 1rem 0.5rem;
 		}
-		.search-result-link {
-			gap: 0.8rem;
-			padding: 0.75rem 0.9rem;
+		.search-box {
+			max-height: 90vh;
 		}
-		.search-result-thumb {
-			width: 84px;
-			height: 56px;
+		.search-results-list :global(.search-result-link) {
+			gap: 0.65rem;
+			padding: 0.5rem 0.75rem;
 		}
-		.search-result-title {
-			font-size: 0.95rem;
+		.search-results-list :global(.search-result-thumb) {
+			width: 68px;
+			height: 45px;
 		}
-		.search-result-arrow {
+		.search-results-list :global(.search-result-title) {
+			font-size: 0.88rem;
+		}
+		.search-results-list :global(.search-result-arrow) {
 			display: none;
 		}
 		.search-shortcuts span:not(:last-child) {
