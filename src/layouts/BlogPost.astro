@@ -3,20 +3,31 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import CodeEnhancer from '../components/CodeEnhancer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import Ad from '../components/Ad.astro';
 import TableOfContents from '../components/TableOfContents.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import { Icon } from 'astro-icon/components';
 
 type Props = CollectionEntry<'blog'>['data'] & { headings?: any[] };
 
 const { title, description, pubDate, updatedDate, heroImage, categories, headings } = Astro.props;
+
+const breadcrumbItems = [
+	{ label: 'ホーム', href: '/' },
+	...(categories && categories.length > 0
+		? [{ label: categories[0], href: `/category/${categories[0]}` }]
+		: []),
+	{ label: title },
+];
+
 ---
 
 <html lang="ja">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} image={heroImage} />
 		<style>
 			.hero-image {
 				width: 100%;
@@ -234,6 +245,7 @@ const { title, description, pubDate, updatedDate, heroImage, categories, heading
 			<div class="layout-container">
 				<!-- メインコンテンツ (左カラム) -->
 				<article class="layout-main">
+					<Breadcrumb items={breadcrumbItems} />
 					<div class="title">
 						<div class="date">
 							<span><Icon name="heroicons:calendar" class="icon-inline" /> <FormattedDate date={pubDate} /></span>
@@ -276,7 +288,6 @@ const { title, description, pubDate, updatedDate, heroImage, categories, heading
 							if (!toc.querySelector('.toc-container')) return;
 							
 							// 記事本文(.prose)内の最初の見出し(h2, h3, h4)を取得
-							const firstHeading = document.querySelector('.prose h2, .prose h3, .prose h4');
 							if (firstHeading && firstHeading.parentNode && toc.nextElementSibling !== firstHeading) {
 								firstHeading.parentNode.insertBefore(toc, firstHeading);
 							}
@@ -288,19 +299,17 @@ const { title, description, pubDate, updatedDate, heroImage, categories, heading
 				<aside class="layout-sidebar">
 					<div class="widget box">
 						<div class="widget-title"><Icon name="heroicons:user" class="icon-inline" /> プロフィール</div>
-						<img class="profile-pic" src="/brand/teluis_avatar.jpg" alt="プロフィール画像" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; background-color: var(--border-color); display: block; object-fit: cover;" />
+						<img class="profile-pic" src="/brand/teluis_avatar.jpg" alt="プロフィール逕ｻ蜒・ style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; background-color: var(--border-color); display: block; object-fit: cover;" />
 						<p class="profile-desc" style="font-size: 0.9rem; color: var(--text-main); text-align: left; line-height: 1.6;">
-							<strong>ITエンジニア / コンサルタント</strong><br/>
-							日経大手企業でキャリアをスタートし、AIスタートアップでの開発経験を経て、現在はコンサルティングファームに勤務。ビジネスマンに必要なスキルや、日々の業務で得た実践的なエッセンスを発信しています。
-						</p>
+							<strong>ITエンジニア / コンサルタント/strong><br/>
+							日系大手企業でキャリアをスタートし、AIスタートアップでの開発経験を経て、現在はコンサルティングファームに勤務。ビジネスマンに必要なスキルや、日々の業務で得た実践的なエッセンスを発信しています。
 					</div>
 
 					<div class="widget box">
 						<div class="widget-title"><Icon name="heroicons:users" class="icon-inline" /> TELUIS 妻</div>
-						<img class="profile-pic" src="/brand/テルイズ妻.png" alt="妻プロフィール" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; background-color: var(--border-color); display: block; object-fit: cover;" />
+						<img class="profile-pic" src="/brand/teluis_avatar.jpg" alt="螯ｻプロフィール" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; background-color: var(--border-color); display: block; object-fit: cover;" />
 						<p class="profile-desc" style="font-size: 0.9rem; color: var(--text-main); text-align: center; line-height: 1.6;">
 							共同運営者。<br/>時々記事を書いたりサポートしています。
-						</p>
 					</div>
 
 					<!-- サイドバー広告 -->
@@ -312,11 +321,11 @@ const { title, description, pubDate, updatedDate, heroImage, categories, heading
 			</div>
 		</main>
 		<Footer />
+		<CodeEnhancer />
 
 		<script>
 			document.addEventListener('DOMContentLoaded', () => {
-				// 目次を最初の見出しの直前に移動
-				const toc = document.getElementById('toc-wrapper');
+				// 目次を最初の見出しの直前に移動const toc = document.getElementById('toc-wrapper');
 				if (toc && toc.querySelector('.toc-container')) {
 					const firstHeading = document.querySelector('.prose h2, .prose h3, .prose h4');
 					if (firstHeading && firstHeading.parentNode && toc.nextElementSibling !== firstHeading) {
@@ -327,15 +336,12 @@ const { title, description, pubDate, updatedDate, heroImage, categories, heading
 				const tables = document.querySelectorAll('.prose table');
 				tables.forEach(table => {
 					// 最初の行の列数をカウント（DOMの table.rows を使用して正確に取得）
-					const firstRowCols = table.rows.length > 0 ? table.rows[0].cells.length : 0;
 					
-					// 比較対象の数（列数 - 1）
-					const targetCount = firstRowCols - 1;
+					// 比較対象の数（列数 - 1）const targetCount = firstRowCols - 1;
 					
 					// 比較対象が3つ以上（全体で4列以上）の場合にロジックを適用
 					if (targetCount >= 3) {
-						// 1番左の列（比較項目）の幅を「1文字幅＋パディング」程度に固定
-						const leftColWidth = '3.5rem';
+						// 1番左の列（比較項目）の幅を「文字幅＋パディング」程度に固定
 						
 						const firstTh = table.querySelector('thead th:first-child');
 						if (firstTh) {
@@ -352,22 +358,19 @@ const { title, description, pubDate, updatedDate, heroImage, categories, heading
 							const ratio = targetCount / 3;
 							table.style.width = `calc(${leftColWidth} + (100% - ${leftColWidth}) * ${ratio})`;
 							
-							// ラッパーを作成
-							const wrapper = document.createElement('div');
+							// ラッパーを作成const wrapper = document.createElement('div');
 							wrapper.className = 'table-scroll-wrapper';
 							
-							// スクロールガイドを作成
-							const hint = document.createElement('div');
+							// スクロールガイドを作成成const hint = document.createElement('div');
 							hint.className = 'table-scroll-hint';
 							hint.innerHTML = '<span>← 左右にスクロールできます →</span>';
 							
-							// DOMツリーに挿入
+							// DOMツリーに挿入･
 							table.parentNode?.insertBefore(wrapper, table);
 							wrapper.appendChild(hint);
 							wrapper.appendChild(table);
 						} else {
 							// 比較対象が3つの場合は画面幅にピッタリ収める
-							table.style.width = '100%';
 						}
 					}
 				});
