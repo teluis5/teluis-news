@@ -1,4 +1,4 @@
-﻿---
+---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
@@ -21,6 +21,7 @@ const { title, description, image = FallbackImage } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
 
 <!-- Google Tag Manager (管理者除外対応) -->
 <script is:inline>
@@ -91,4 +92,4 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta name="twitter:card" content="summary_large_image" />
 
 <!-- Google AdSense Script -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8011635154814608" crossorigin="anonymous"></script>
+<!-- AdSense paused during main domain review: <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8011635154814608" crossorigin="anonymous"></script> -->

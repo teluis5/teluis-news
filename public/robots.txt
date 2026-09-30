@@ -1,4 +1,8 @@
-﻿User-agent: *
-Allow: /
+User-agent: Mediapartners-Google
+Disallow: /
 
-Sitemap: https://news.teluis.com/sitemap-index.xml
+User-agent: AdsBot-Google
+Disallow: /
+
+User-agent: *
+Disallow: /
