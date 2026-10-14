@@ -6,6 +6,7 @@ import Footer from '../components/Footer.astro';
 import CodeEnhancer from '../components/CodeEnhancer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import Sidebar from '../components/Sidebar.astro';
 import Ad from '../components/Ad.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
@@ -14,6 +15,7 @@ import { Icon } from 'astro-icon/components';
 type Props = CollectionEntry<'blog'>['data'] & { headings?: any[] };
 
 const { title, description, pubDate, updatedDate, heroImage, categories, headings } = Astro.props;
+const currentSlug = Astro.props.currentSlug || Astro.url.pathname.replace(/^\/blog\//, '').replace(/\/$/, '');
 
 const breadcrumbItems = [
 	{ label: 'ホーム', href: '/' },
@@ -296,28 +298,7 @@ const breadcrumbItems = [
 				</article>
 
 				<!-- サイドバー (右カラム) -->
-				<aside class="layout-sidebar">
-					<div class="widget box">
-						<div class="widget-title"><Icon name="heroicons:user" class="icon-inline" /> プロフィール</div>
-						<img class="profile-pic" src="/brand/teluis_avatar.jpg" alt="プロフィール逕ｻ蜒・ style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; background-color: var(--border-color); display: block; object-fit: cover;" />
-						<p class="profile-desc" style="font-size: 0.9rem; color: var(--text-main); text-align: left; line-height: 1.6;">
-							<strong>ITエンジニア / コンサルタント/strong><br/>
-							日系大手企業でキャリアをスタートし、AIスタートアップでの開発経験を経て、現在はコンサルティングファームに勤務。ビジネスマンに必要なスキルや、日々の業務で得た実践的なエッセンスを発信しています。
-					</div>
-
-					<div class="widget box">
-						<div class="widget-title"><Icon name="heroicons:users" class="icon-inline" /> TELUIS 妻</div>
-						<img class="profile-pic" src="/brand/teluis_avatar.jpg" alt="螯ｻプロフィール" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; background-color: var(--border-color); display: block; object-fit: cover;" />
-						<p class="profile-desc" style="font-size: 0.9rem; color: var(--text-main); text-align: center; line-height: 1.6;">
-							共同運営者。<br/>時々記事を書いたりサポートしています。
-					</div>
-
-					<!-- サイドバー広告 -->
-					<div class="widget box" style="padding: 1rem; text-align: center;">
-						<div style="font-size:0.8rem; color:var(--text-light); margin-bottom:0.5rem;">スポンサーリンク</div>
-						<Ad />
-					</div>
-				</aside>
+				<Sidebar />
 			</div>
 		</main>
 		<Footer />

@@ -24,12 +24,14 @@ const breadcrumbListSchema = {
 		};
 		if (item.href) {
 			try {
-				listItem.item = new URL(item.href, origin).href;
+				const h = item.href.endsWith('/') ? item.href : `${item.href}/`;
+				listItem.item = new URL(h, origin).href;
 			} catch {
 				listItem.item = item.href;
 			}
 		} else if (index === items.length - 1) {
-			listItem.item = Astro.url.href;
+			const currentUrl = Astro.url.href;
+			listItem.item = currentUrl.endsWith('/') ? currentUrl : `${currentUrl}/`;
 		}
 		return listItem;
 	}),

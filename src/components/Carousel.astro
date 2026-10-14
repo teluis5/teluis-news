@@ -1,15 +1,21 @@
 ---
 // src/components/Carousel.astro
-// 画像やSNS埋め込みを水平スクロールで表示するカルーセルコンポーネント（サムネイルインジケータ付き）
+// 画像やSNS埋め込みを水平スクロールで表示するカルーセルコンポーネント（サムネイルプレビュー・キャプション対応）
+interface Props {
+  aspectRatio?: string; // 例: "16/10", "16/9", "4/3", "1/1"（デフォルト: "16/10"）
+  fit?: 'contain' | 'cover'; // （デフォルト: "contain"）
+}
+
+const { aspectRatio = '16/10', fit = 'contain' } = Astro.props;
 ---
-<div class="carousel-container" data-carousel>
+<div class="carousel-container" data-carousel style={`--carousel-aspect: ${aspectRatio}; --carousel-fit: ${fit};`}>
   <div class="scroller" data-scroller>
     <slot />
   </div>
   
   <div class="thumbnail-nav">
     <button class="nav-arrow prev-arrow" data-prev aria-label="前のスライド">
-      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
     </button>
     
     <div class="thumbnails-container" data-thumbnails>
@@ -17,7 +23,7 @@
     </div>
     
     <button class="nav-arrow next-arrow" data-next aria-label="次のスライド">
-      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
     </button>
   </div>
 </div>
@@ -25,8 +31,14 @@
 <style>
   .carousel-container {
     width: 100%;
-    margin: 2rem 0;
+    margin: 1.25rem 0;
     position: relative;
+  }
+
+  @media (max-width: 640px) {
+    .carousel-container {
+      margin: 1rem 0;
+    }
   }
   
   .scroller {
@@ -34,11 +46,9 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     gap: 16px;
-    padding: 16px 0 16px 0;
+    padding: 4px 0 6px 0;
     margin: 0;
     -webkit-overflow-scrolling: touch;
-    
-    /* スクロールバーを隠す */
     scrollbar-width: none; 
     -ms-overflow-style: none;
   }
@@ -49,35 +59,79 @@
 
   /* カルーセルの各アイテム（直接の子要素）へのスタイル */
   .scroller > :global(*) {
-    flex: 0 0 100%; /* 1枚を大きく見せるように幅を変更 */
-    max-width: 600px;
+    flex: 0 0 100%;
+    max-width: 620px;
     scroll-snap-align: center;
-    border-radius: var(--radius, 4px);
-    background: var(--bg-content, #ffffff);
+    background: transparent;
+    border: none;
+    box-shadow: none;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     box-sizing: border-box;
+    padding: 0;
+    margin: 0 !important;
   }
 
-  /* 画像・iframe等がコンテナをはみ出さないようにする */
+  /* スライドアイテムが figure そのもの、または内部の figure の完全リセット */
+  .scroller > :global(figure),
+  .scroller > :global(*) :global(figure) {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* スライド内の通常 p タグの不要な下マージンリセット */
+  .scroller > :global(*) :global(p:not(.caption):not(.carousel-caption)) {
+    margin: 0 !important;
+  }
+
+  /* 画像の高さ・アスペクト比を統一（背景・枠線なし） */
   .scroller > :global(*) :global(img) {
-    max-width: 100%;
+    width: 100%;
     height: auto;
-    max-height: 60vh;
-    object-fit: contain;
+    aspect-ratio: var(--carousel-aspect, 16 / 10);
+    max-height: 480px;
+    object-fit: var(--carousel-fit, contain);
+    background-color: transparent;
+    border: none;
     border-radius: var(--radius, 4px);
     display: block;
     margin: 0 auto;
+    box-sizing: border-box;
   }
-  
+
   .scroller > :global(*) :global(iframe),
   .scroller > :global(*) :global(blockquote) {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 auto !important;
+  }
+
+  /* スライド内の写真ごとのキャプションスタイル（背景・枠線なし、クリーンなテキストのみ） */
+  .scroller > :global(*) :global(figcaption),
+  .scroller > :global(*) :global(.carousel-caption),
+  .scroller > :global(*) :global(p.caption) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 6px auto 0 auto;
+    padding: 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-light, #64748b);
+    background: none !important;
+    border: none !important;
+    border-radius: 0;
+    text-align: center;
+    line-height: 1.45;
+    box-sizing: border-box;
+    box-shadow: none !important;
   }
   
   /* サムネイルナビゲーション領域 */
@@ -86,23 +140,30 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    margin-top: 16px;
+    margin-top: 10px;
   }
 
   .nav-arrow {
-    background: none;
-    border: none;
-    color: var(--text-light, #777777);
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 50%;
+    color: var(--text-main, #475569);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
-    transition: color 0.2s;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
   }
 
   .nav-arrow:hover {
     color: var(--theme-accent, #007cba);
+    border-color: var(--theme-accent, #007cba);
+    background: rgba(0, 124, 186, 0.08);
+    transform: scale(1.08);
   }
 
   .thumbnails-container {
@@ -113,7 +174,12 @@
     padding: 4px;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    max-width: calc(100% - 80px); /* 矢印のスペースを確保 */
+    max-width: calc(100% - 90px);
+  }
+
+  /* 4枚以下の場合は中央揃え */
+  .thumbnails-container.is-few {
+    justify-content: center;
   }
 
   .thumbnails-container::-webkit-scrollbar {
@@ -122,29 +188,34 @@
 
   /* 生成されるサムネイルのスタイル */
   .thumbnails-container :global(.thumb-btn) {
-    flex: 0 0 60px;
-    height: 60px;
+    flex: 0 0 62px;
+    width: 62px;
+    height: 62px;
     padding: 0;
     border: 2px solid transparent;
-    background-color: var(--bg-main, #f3f4f5);
+    background-color: var(--bg-main, #f1f5f9);
     cursor: pointer;
     overflow: hidden;
     scroll-snap-align: center;
-    transition: opacity 0.3s, border-color 0.3s;
+    transition: all 0.25s ease;
     opacity: 0.6;
-    border-radius: 4px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
   }
 
   .thumbnails-container :global(.thumb-btn:hover) {
-    opacity: 0.8;
+    opacity: 0.9;
+    transform: translateY(-1px);
   }
 
   .thumbnails-container :global(.thumb-btn.active) {
     opacity: 1;
     border-color: var(--theme-accent, #007cba);
+    box-shadow: 0 0 0 1px var(--theme-accent, #007cba), 0 3px 8px rgba(0, 124, 186, 0.2);
+    transform: scale(1.05);
   }
 
   .thumbnails-container :global(.thumb-btn img) {
@@ -155,9 +226,31 @@
 
   /* 画像がない場合（SNS埋め込み等）のフォールバックアイコン用 */
   .thumbnails-container :global(.thumb-btn .fallback-icon) {
-    font-size: 20px;
+    font-size: 18px;
     color: var(--text-main, #333333);
-    font-weight: bold;
+    font-weight: 700;
+  }
+
+  /* モバイル対応 */
+  @media (max-width: 640px) {
+    .scroller > :global(*) :global(figcaption),
+    .scroller > :global(*) :global(.carousel-caption),
+    .scroller > :global(*) :global(p.caption) {
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      margin-top: 8px;
+    }
+
+    .thumbnails-container :global(.thumb-btn) {
+      flex: 0 0 52px;
+      width: 52px;
+      height: 52px;
+    }
+
+    .nav-arrow {
+      width: 30px;
+      height: 30px;
+    }
   }
 </style>
 
@@ -168,6 +261,7 @@
     carousels.forEach(carousel => {
       const scroller = carousel.querySelector('[data-scroller]');
       const thumbnailsContainer = carousel.querySelector('[data-thumbnails]');
+      const thumbnailNav = carousel.querySelector('.thumbnail-nav') as HTMLElement | null;
       const btnPrev = carousel.querySelector('[data-prev]');
       const btnNext = carousel.querySelector('[data-next]');
       
@@ -176,12 +270,41 @@
       const items = Array.from(scroller.children);
       if (items.length === 0) return;
 
+      // 1枚のみの場合はナビゲーションを隠す
+      if (items.length <= 1 && thumbnailNav) {
+        thumbnailNav.style.display = 'none';
+        return;
+      }
+
+      // 4枚以下の場合は中央揃え用クラスを付与
+      if (items.length <= 4) {
+        thumbnailsContainer.classList.add('is-few');
+      } else {
+        thumbnailsContainer.classList.remove('is-few');
+      }
+
+      // 各スライドの写真キャプション自動セットアップ
+      items.forEach((item) => {
+        // すでに figcaption や .caption が存在するかチェック
+        const existingCaption = item.querySelector('figcaption, .carousel-caption, p.caption');
+        if (!existingCaption) {
+          const img = item.querySelector('img');
+          // alt 属性があり、かつ空でなければキャプションとして自動生成
+          if (img && img.alt && img.alt.trim() !== '') {
+            const caption = document.createElement('figcaption');
+            caption.className = 'carousel-caption';
+            caption.textContent = img.alt;
+            item.appendChild(caption);
+          }
+        }
+      });
+
       // サムネイルを生成
       thumbnailsContainer.innerHTML = '';
       const thumbnails = items.map((item, index) => {
         const btn = document.createElement('button');
         btn.classList.add('thumb-btn');
-        btn.setAttribute('aria-label', `Slide ${index + 1}`);
+        btn.setAttribute('aria-label', `スライド ${index + 1}`);
         if (index === 0) btn.classList.add('active');
         
         // スライド内の画像を探す
@@ -189,7 +312,7 @@
         if (img && img.src) {
           const thumbImg = document.createElement('img');
           thumbImg.src = img.src;
-          thumbImg.alt = `Thumbnail ${index + 1}`;
+          thumbImg.alt = `サムネイル ${index + 1}`;
           btn.appendChild(thumbImg);
         } else {
           // 画像がない場合（SNSなど）はスライド番号（1〜）をテキストとして置く
@@ -278,7 +401,7 @@
           });
           isScrolling = true;
         }
-      });
+      }, { passive: true });
       
       updateIndicators();
     });

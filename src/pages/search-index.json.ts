@@ -1,4 +1,4 @@
-﻿import { getCollection } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 export const prerender = true;
 
