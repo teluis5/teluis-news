@@ -16,6 +16,16 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = FallbackImage } = Astro.props;
+
+// Google 検索結果にブランド名（サイト名）を表示させるための WebSite 構造化データ
+const siteUrl = Astro.site ? Astro.site.toString() : Astro.url.origin;
+const websiteSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	'name': 'teluis news',
+	'alternateName': ["テルイスニュース","news.teluis.com"],
+	'url': siteUrl,
+};
 ---
 
 <!-- Global Metadata -->
@@ -76,6 +86,9 @@ const { title, description, image = FallbackImage } = Astro.props;
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+
+<!-- Google サイト名表示用 構造化データ (WebSite JSON-LD) -->
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
