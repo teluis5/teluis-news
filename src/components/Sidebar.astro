@@ -11,6 +11,8 @@ interface Props {
 	authorTitle?: string;
 	authorBio?: string;
 	authorAvatar?: string;
+	currentCategories?: string[];
+	currentSlug?: string;
 }
 
 const siteConsts = consts as Record<string, any>;
@@ -20,12 +22,17 @@ const {
 	authorTitle = siteConsts.AUTHOR_TITLE ?? siteConsts.AUTHOR?.title ?? '',
 	authorBio = siteConsts.AUTHOR_BIO ?? siteConsts.AUTHOR?.bio ?? '',
 	authorAvatar = siteConsts.AUTHOR_AVATAR ?? siteConsts.AUTHOR?.avatar ?? '/brand/teluis_avatar.webp',
+	currentCategories,
+	currentSlug,
 } = Astro.props;
 
 // 全記事の取得（ドラフト除外）
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const recentPosts = sortedPosts.slice(0, 5);
+const recentPosts = sortedPosts.filter((post) =>
+	post.id !== currentSlug && (currentCategories === undefined ||
+		post.data.categories?.some((category: string) => currentCategories.includes(category)))
+).slice(0, 5);
 
 // カテゴリ別記事件数の集計
 const categoryCounts: Record<string, number> = {};
@@ -39,7 +46,7 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 
 <aside class="layout-sidebar">
 	<!-- プロフィールウィジェット -->
-	<div class="sidebar-widget box">
+	{siteConsts.SHOW_SIDEBAR_PROFILE !== false && <div class="sidebar-widget box">
 		<div class="widget-header">
 			<Icon name="heroicons:user" class="icon-inline" />
 			<span>運営者プロフィール</span>
@@ -62,7 +69,7 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 				詳しいプロフィール・運営情報を見る &raquo;
 			</a>
 		</div>
-	</div>
+	</div>}
 
 	<!-- カテゴリ一覧ウィジェット -->
 	{categories.length > 0 && (
@@ -92,7 +99,7 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 		<div class="sidebar-widget box">
 			<div class="widget-header">
 				<Icon name="heroicons:sparkles" class="icon-inline" />
-				<span>新着記事</span>
+				<span>{currentCategories === undefined ? '新着記事' : '同じカテゴリーの新着記事'}</span>
 			</div>
 			<div class="recent-posts">
 				{recentPosts.map((post) => (
@@ -128,6 +135,63 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 
 	<!-- ブログ固有カスタムウィジェット用スロット（各メディアで独自拡張可能） -->
 	<slot name="sidebar-custom" />
+
+	<!-- 管理者限定・記事元ソース導線（一般読者・HTMLにはソースURLを一切露出せず、teluis_admin=true 端末のみ表示） -->
+	<div
+		id="teluis-admin-source-widget"
+		class="sidebar-widget box admin-source-widget"
+		data-slug={currentSlug || ''}
+		style="display: none;"
+	>
+		<div class="widget-header admin-widget-header">
+			<Icon name="heroicons:lock-closed" class="icon-inline" />
+			<span>管理者メニュー（非公開）</span>
+		</div>
+		<div style="display: flex; flex-direction: column; gap: 0.55rem;">
+			<a
+				id="teluis-admin-source-link"
+				href="https://teluis-ops-center.web.app/#sources"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="admin-source-btn"
+			>
+				🔒 管理者: この記事の元ソースを見る ↗
+			</a>
+			<a
+				href="https://teluis-ops-center.web.app/#sources"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="admin-source-sublink"
+			>
+				記事ソース一覧 (Ops Center) ↗
+			</a>
+		</div>
+	</div>
+	<script is:inline>
+		(() => {
+			try {
+				var isAdmin = document.cookie.indexOf('teluis_admin=true') !== -1;
+				if (!isAdmin && typeof localStorage !== 'undefined') {
+					isAdmin = localStorage.getItem('teluis_admin') === 'true';
+				}
+				if (!isAdmin) return;
+				var widget = document.getElementById('teluis-admin-source-widget');
+				var link = document.getElementById('teluis-admin-source-link');
+				if (!widget || !link) return;
+				var slug = (widget.getAttribute('data-slug') || '').trim();
+				if (!slug && location.pathname.indexOf('/blog/') === 0) {
+					slug = location.pathname.replace(/^\/blog\//, '').replace(/\/+$/, '');
+				}
+				if (slug) {
+					link.href = 'https://teluis-ops-center.web.app/#sources?host=' + encodeURIComponent(location.hostname) + '&slug=' + encodeURIComponent(slug);
+				} else {
+					link.href = 'https://teluis-ops-center.web.app/#sources';
+					link.textContent = '🔒 管理者: 記事ソース一覧を見る ↗';
+				}
+				widget.style.display = 'block';
+			} catch (e) {}
+		})();
+	</script>
 
 	<!-- サイドバー手動広告スロット（PC追従・最下部） -->
 	<Ad position="sidebar" />
@@ -387,5 +451,43 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 
 	.date-icon {
 		font-size: 0.85rem;
+	}
+
+	/* 管理者専用ソース導線ウィジェット */
+	.admin-source-widget {
+		border: 1px solid #cbd5e1;
+		background: #f8fafc;
+	}
+	.admin-widget-header {
+		background-color: #0f172a;
+		color: #f8fafc;
+		border-left-color: #f59e0b;
+	}
+	.admin-source-btn {
+		display: block;
+		text-align: center;
+		padding: 0.6rem 0.75rem;
+		background-color: #0f172a;
+		color: #ffffff;
+		border-radius: 6px;
+		font-size: 0.82rem;
+		font-weight: 700;
+		text-decoration: none;
+		transition: background-color 0.2s;
+	}
+	.admin-source-btn:hover {
+		background-color: #1e293b;
+		color: #ffffff;
+	}
+	.admin-source-sublink {
+		display: block;
+		text-align: center;
+		font-size: 0.76rem;
+		color: #475569;
+		text-decoration: none;
+	}
+	.admin-source-sublink:hover {
+		color: #0284c7;
+		text-decoration: underline;
 	}
 </style>
